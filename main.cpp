@@ -3,7 +3,8 @@
 
 int main(int argc, char* argv[]) {
 
-    mixedLog("Hello");
+    MyLogger logger;
+    logger.fileLog("Hello");
 
     return 0;
 }

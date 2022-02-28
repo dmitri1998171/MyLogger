@@ -5,43 +5,49 @@ using namespace std;
 
 enum LogError{INFO, WARNING, ERROR, DEBUG};
 
-char errors[4][8] = {
-    "INFO", "WARNING", "ERROR", "DEBUG"
-};
+class MyLogger {
+    private:
+        char* LogError() {
+            switch (error_lvl) {
+                case INFO:
+                    return "INFO";
 
-int error = ERROR;
+                case WARNING:
+                    return "WARNING";
+                
+                case ERROR:
+                    return "ERROR";
 
-char* LogError() {
-    switch (error) {
-        case INFO:
-            return errors[0];
+                case DEBUG:
+                    return "DEBUG";
+            }
 
-        case WARNING:
-            return errors[1];
+            return "INFO";
+        }
         
-        case ERROR:
-            return errors[2];
+    public:
+        int error_lvl;
+        char* filename;
 
-        case DEBUG:
-            return errors[3];
-    }
+        MyLogger() {
+            error_lvl = INFO;
+            filename = "log.log";
+        }
 
-    return errors[0];
-}
+        void consoleLog(char* message) {
+            cout << LogError() << ' ' << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
+        }
 
-void consoleLog(char* message) {
-    cout << LogError() << ' ' << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
-}
+        void fileLog(char* message) {
+            ofstream file(filename, ios_base::app);
 
-void fileLog(char* message) {
-    ofstream file("log.log", ios_base::app);
+            file << LogError() << ' ' << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
 
-    file << LogError() << ' ' << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
+            file.close();
+        }
 
-    file.close();
-}
-
-void mixedLog(char* message) {
-    consoleLog(message);
-    fileLog(message);
-}
+        void mixedLog(char* message) {
+            consoleLog(message);
+            fileLog(message);
+        }
+};
