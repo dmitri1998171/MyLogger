@@ -3,8 +3,8 @@
 
 int main(int argc, char* argv[]) {
 
-    MyLogger logger;
-    logger.fileLog("Hello");
+    LOG_INIT
+    LOG_MIXED(INFO, "hello")
 
     return 0;
 }
