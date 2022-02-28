@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -28,6 +29,19 @@ char* LogError() {
     return errors[0];
 }
 
-void consoleLog(char* str) {
-    cout << LogError() << ' ' <<  str << endl;
+void consoleLog(char* message) {
+    cout << LogError() << ' ' << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
+}
+
+void fileLog(char* message) {
+    ofstream file("log.log", ios_base::app);
+
+    file << LogError() << ' ' << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
+
+    file.close();
+}
+
+void mixedLog(char* message) {
+    consoleLog(message);
+    fileLog(message);
 }

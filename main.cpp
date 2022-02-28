@@ -3,7 +3,7 @@
 
 int main(int argc, char* argv[]) {
 
-    consoleLog("Hello");
+    mixedLog("Hello");
 
     return 0;
 }
