@@ -2,11 +2,11 @@ BIN := main
 SRC := main.cpp
 HEADER := logger.hpp
 CC := g++
-CFLAGS  :=
+CFLAGS  := 
 LDFLAGS :=
 
 $(BIN): $(SRC) 
-	clear && $(CC) $(SRC) -I $(HEADER) -o $(BIN)
+	clear && $(CC) $(SRC) -I $(HEADER) $(CFLAGS) $(LDFLAGS) -o $(BIN)
 
 clean:
 	rm -rf $(BIN)

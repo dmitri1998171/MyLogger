@@ -1,5 +1,9 @@
+#ifndef MY_LOGGER_HPP
+#define MY_LOGGER_HPP
+
 #include <iostream>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -9,7 +13,7 @@ class MyLogger {
     private:
         int error_lvl;
 
-        char* LogError() {
+        string LogError() {
             switch (error_lvl) {
                 case INFO:
                     return "INFO";
@@ -25,30 +29,43 @@ class MyLogger {
         }
         
     public:
-        char* logname;
+        static string logname; // logname: file name where logger write 
+        string output; // output: stdout - to console; file - to logfile; mix - both ways.
 
-        MyLogger(const char* filename, const char* funcName, int lineNumber, int error_lvl, char* message) {
+        MyLogger(string filename, string funcName, int lineNumber, int error_lvl, string message) {
             this->error_lvl = error_lvl;
-            
-            cout << LogError() << ' ' << filename << ":" << funcName << ":" << lineNumber << "  " << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
+            output = "file";
+
+            if(output == "stdout") {
+                cout << LogError() << ' ' << filename << ":" << funcName << "():" << lineNumber << "  " << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
+            }
+
+            if(output == "file") {
+                fileLog(filename, funcName, lineNumber, error_lvl, message);
+            }
         }
 
-        void fileLog(int error_lvl, char* message) {
+        ~MyLogger() {}
+
+        void fileLog(string filename, string funcName, int lineNumber, int error_lvl, string message) {
             ofstream file(logname, ios_base::app);
 
-            this->error_lvl = error_lvl;
-
-            file << LogError() << ' ' << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
+            file << LogError() << ' ' << filename << ":" << funcName << "():" << lineNumber << "  " << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
 
             file.close();
         }
 };
 
+string MyLogger::logname = "log.log";
+
 // #if DEBUG 
 
-    #define LOG(error_lvl, msg) MyLogger logger(__FILE__, __FUNCTION__, __LINE__, error_lvl, msg);
+    #define LOG(error_lvl, msg) \
+        MyLogger logger(__FILE__, __FUNCTION__, __LINE__, error_lvl, msg);
 
-    #define LOG_CONFIG_FILENAME(_filename) logger.logname = _filename; 
+    #define LOG_CONFIG_FILENAME(_filename) \
+        MyLogger::logname = _filename; 
 
 
 // #endif
+#endif
