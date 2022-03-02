@@ -1,6 +1,13 @@
 #ifndef MY_LOGGER_HPP
 #define MY_LOGGER_HPP
 
+// ===============
+
+#define DEBUG 1     // 1 - switch on logger; 0 - switch off
+
+// ===============
+
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -64,14 +71,18 @@ class MyLogger {
 string MyLogger::logname = "log.log";
 string MyLogger::tab;
 
-// #if DEBUG 
 
+#if DEBUG == 1
     #define LOG(error_lvl, msg) \
-        MyLogger logger(__FILE__, __FUNCTION__, __LINE__, error_lvl, msg);
+        MyLogger logger(__FILE__, __FUNCTION__, __LINE__, error_lvl, msg); 
 
     #define LOG_CONFIG_FILENAME(_filename) \
         MyLogger::logname = _filename; 
 
+#else
+    #define LOG(x, y)
+    #define LOG_CONFIG_FILENAME(x)
 
-// #endif
+#endif
+
 #endif
