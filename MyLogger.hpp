@@ -12,6 +12,7 @@ enum LogError{INFO, WARNING, ERROR};
 class MyLogger {
     private:
         int error_lvl;
+        static string tab;    // Indent line
 
         string LogError() {
             switch (error_lvl) {
@@ -37,26 +38,31 @@ class MyLogger {
             output = "file";
 
             if(output == "stdout") {
-                cout << LogError() << ' ' << filename << ":" << funcName << "():" << lineNumber << "  " << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
+                cout << tab << LogError() << ' ' << filename << ":" << funcName << "():" << lineNumber << "  " << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
             }
 
             if(output == "file") {
                 fileLog(filename, funcName, lineNumber, error_lvl, message);
             }
+
+            tab.append("    ");
         }
 
-        ~MyLogger() {}
+        ~MyLogger() {
+            tab.resize(tab.length() - 4);
+        }
 
         void fileLog(string filename, string funcName, int lineNumber, int error_lvl, string message) {
             ofstream file(logname, ios_base::app);
 
-            file << LogError() << ' ' << filename << ":" << funcName << "():" << lineNumber << "  " << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
+            file << tab << LogError() << ' ' << filename << ":" << funcName << "():" << lineNumber << "  " << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
 
             file.close();
         }
 };
 
 string MyLogger::logname = "log.log";
+string MyLogger::tab;
 
 // #if DEBUG 
 
