@@ -3,7 +3,7 @@
 
 using namespace std;
 
-enum LogError{INFO, WARNING, ERROR, DEBUG};
+enum LogError{INFO, WARNING, ERROR};
 
 class MyLogger {
     private:
@@ -19,30 +19,22 @@ class MyLogger {
                 
                 case ERROR:
                     return "ERROR";
-
-                case DEBUG:
-                    return "DEBUG";
             }
 
             return "INFO";
         }
         
     public:
-        char* filename;
+        char* logname;
 
-        MyLogger() {
-            error_lvl = INFO;
-            filename = "log.log";
-        }
-
-        void consoleLog(int error_lvl, char* message) {
+        MyLogger(const char* filename, const char* funcName, int lineNumber, int error_lvl, char* message) {
             this->error_lvl = error_lvl;
-
-            cout << LogError() << ' ' << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
+            
+            cout << LogError() << ' ' << filename << ":" << funcName << ":" << lineNumber << "  " << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
         }
 
         void fileLog(int error_lvl, char* message) {
-            ofstream file(filename, ios_base::app);
+            ofstream file(logname, ios_base::app);
 
             this->error_lvl = error_lvl;
 
@@ -50,20 +42,13 @@ class MyLogger {
 
             file.close();
         }
-
-        void mixedLog(int error_lvl, char* message) {
-            consoleLog(error_lvl, message);
-            fileLog(error_lvl, message);
-        }
 };
 
-#define LOG_INIT MyLogger logger;
-#define LOG_CONFIG_FILENAME(_filename) logger.filename = _filename; 
-// #define LOG_INIT(_filename) \
-//     MyLogger logger; \
-//     LOG_CONFIG_FILENAME(_filename)
+// #if DEBUG 
+
+    #define LOG(error_lvl, msg) MyLogger logger(__FILE__, __FUNCTION__, __LINE__, error_lvl, msg);
+
+    #define LOG_CONFIG_FILENAME(_filename) logger.logname = _filename; 
 
 
-#define LOG_PRINT(error_lvl, message) logger.consoleLog(error_lvl, message);
-#define LOG_FILE(error_lvl, message) logger.fileLog(error_lvl, message);
-#define LOG_MIXED(error_lvl, message) logger.mixedLog(error_lvl, message);
+// #endif
