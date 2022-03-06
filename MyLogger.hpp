@@ -82,7 +82,10 @@ string MyLogger::tab;
 
 // stdout - to console; file - to logfile; mix - both ways.
     #define LOG_CONFIG_FILENAME(_filename) \
-        MyLogger::logname = _filename; \
+        MyLogger::logname = _filename; 
+
+    #define PRINT(var) \
+        cout << #var << ": " << var << endl;
 
 #else
     #define LOG(x, y)

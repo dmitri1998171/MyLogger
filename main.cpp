@@ -13,9 +13,11 @@ void foo() {
 
 int main(int argc, char* argv[]) {
 
-    LOG(WARNING, "Error message will be here.")
+    int x = 5;
+    // LOG(WARNING, "Error message will be here.")
+    PRINT(x)
 
-    foo();
+    // foo();
 
     return 0;
 }
