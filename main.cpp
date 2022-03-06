@@ -14,10 +14,10 @@ void foo() {
 int main(int argc, char* argv[]) {
 
     int x = 5;
-    // LOG(WARNING, "Error message will be here.")
-    PRINT(x)
+    LOG(WARNING, "Error message will be here.")
+    // PRINT(x)
 
-    // foo();
+    foo();
 
     return 0;
 }

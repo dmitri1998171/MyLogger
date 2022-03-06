@@ -50,9 +50,12 @@ class MyLogger {
             }
 
             if(output == "file") {
-                ofstream file(logname, ios_base::app);
-                file << str << endl;
-                file.close();
+                fileLog();
+            }
+
+            if (output == "mix") {
+                cout << str;
+                fileLog();
             }
 
             tab.append("    ");
@@ -62,11 +65,9 @@ class MyLogger {
             tab.resize(tab.length() - 4);
         }
 
-        void fileLog(string filename, string funcName, int lineNumber, int error_lvl, string message) {
+        void fileLog() {
             ofstream file(logname, ios_base::app);
-
-            file << tab << LogError() << ' ' << filename << ":" << funcName << "():" << lineNumber << "  " << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
-
+            file << str << endl;
             file.close();
         }
 };
@@ -75,6 +76,7 @@ string MyLogger::logname = "log.log";
 string MyLogger::output = "file";
 string MyLogger::tab;
 
+// ========================================================
 
 #if DEBUG == 1
     #define LOG(error_lvl, msg) \
@@ -84,6 +86,7 @@ string MyLogger::tab;
     #define LOG_CONFIG_FILENAME(_filename) \
         MyLogger::logname = _filename; 
 
+// 
     #define PRINT(var) \
         cout << #var << ": " << var << endl;
 
