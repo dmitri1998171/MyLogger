@@ -18,8 +18,9 @@ enum LogError{INFO, WARNING, ERROR};
 
 class MyLogger {
     private:
+        string str;
         int error_lvl;
-        static string tab;    // Indent line
+        static string tab;     // Indent line
 
         string LogError() {
             switch (error_lvl) {
@@ -37,19 +38,21 @@ class MyLogger {
         }
         
     public:
-        static string logname; // logname: file name where logger write 
-        string output; // output: stdout - to console; file - to logfile; mix - both ways.
+        static string logname; // File name where logger write 
+        static string output;  // stdout - to console; file - to logfile; mix - both ways.
 
         MyLogger(string filename, string funcName, int lineNumber, int error_lvl, string message) {
             this->error_lvl = error_lvl;
-            output = "file";
-
+            str = tab + LogError() + ' ' + filename + ":" + funcName + "():" + to_string(lineNumber) + "  " + __DATE__ + ' ' + __TIME__ + ' ' +  message;
+            
             if(output == "stdout") {
-                cout << tab << LogError() << ' ' << filename << ":" << funcName << "():" << lineNumber << "  " << __DATE__ << ' ' << __TIME__ << ' ' <<  message << endl;
+                cout << str;
             }
 
             if(output == "file") {
-                fileLog(filename, funcName, lineNumber, error_lvl, message);
+                ofstream file(logname, ios_base::app);
+                file << str << endl;
+                file.close();
             }
 
             tab.append("    ");
@@ -69,6 +72,7 @@ class MyLogger {
 };
 
 string MyLogger::logname = "log.log";
+string MyLogger::output = "file";
 string MyLogger::tab;
 
 
@@ -76,8 +80,9 @@ string MyLogger::tab;
     #define LOG(error_lvl, msg) \
         MyLogger logger(__FILE__, __FUNCTION__, __LINE__, error_lvl, msg); 
 
+// stdout - to console; file - to logfile; mix - both ways.
     #define LOG_CONFIG_FILENAME(_filename) \
-        MyLogger::logname = _filename; 
+        MyLogger::logname = _filename; \
 
 #else
     #define LOG(x, y)
