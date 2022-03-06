@@ -14,6 +14,7 @@ void foo() {
 int main(int argc, char* argv[]) {
 
     int x = 5;
+    // LOG_CONFIG_TIMESTAMP(false)
     LOG(WARNING, "Error message will be here.")
     // PRINT(x)
 
